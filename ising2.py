@@ -154,19 +154,22 @@ def plotten(x):
 
 def metropolis(b,SpinConf):
 	j=0
-	spinvektor = [[0 for x in range(2)] for y in range(SpinConf)]
+	spinvektor = [[eins(b) for x in range(2)] for y in range(SpinConf)]
 	spinvektor[0][0]=Zufallsgitter(b)
-	gitter=spinvektor[0][0]
-	gitter[0][0]=-gitter[0][0]
-	spinvektor[0][1]=gitter
+
+
+	for x in range(b):
+		for y in range(b):
+			spinvektor[0][1][x][y]=spinvektor[0][0][x][y]
+
+
+	spinvektor[0][1][0][0]=-spinvektor[0][0][0][0]
+
 	H1=Hamiltonian(spinvektor[0][0],b)
-	#print(gitter)
-
-
-	#print(gitter)
 	H2=Hamiltonian(spinvektor[0][1],b)
 	DifH=H2-H1
-	print(H1,H2,DifH)
+#	print(spinvektor)
+	print(H1,H2,DifH,spinvektor[0][0],spinvektor[0][1])
 
 	for x in range(b*b*b*b):
 		for y in range(b):
@@ -177,37 +180,25 @@ def metropolis(b,SpinConf):
 
 			Paccept=min(np.exp(-DifH),1.)
 			#print(x,y,Paccept,j)
-			H1=Hamiltonian(gitter,b)
+			H1=Hamiltonian(spinvektor[j][0],b)
 			i = random.randint(0, 100)/100.
-			print(i,Paccept)
+			print(i,Paccept,spinvektor[j][0],spinvektor[j][1])
 			if i < Paccept:
-				#print(gitter)
-				gitter[x][y] = -gitter[x][y]
-				#f=gitter
-				#print(gitter,j)
-				print(spinvektor)
-				#spinvektor.append(gitter)
+				for x in range(b):
+					for y in range(b):
+						spinvektor[j][1][x][y]=spinvektor[j][0][x][y]
 
-
-				print(spinvektor)
+				spinvektor[j][1][x][y]=-spinvektor[j][0][x][y]
+				H2=Hamiltonian(spinvektor[j][1],b)
+				DifH=H2-H1
 				j+=1
-			H2=Hamiltonian(gitter,b)
-			DifH=H2-H1
-
+				print(j)
 	#print(spinvektor)
 	return spinvektor
 
 
 
-def metro(b,SpinConf):
-	j=0
-
-	spinvektor = [[0 for x in range(2)] for y in range(SpinConf)]
-
-	print(spinvektor[2][1])
-
-metro(3,10)
-#metropolis(3,3)
+metropolis(3,3)
 #print(metropolis(3,15))
 #plt.hist(metropolis(3,10))
 #plt.title("Hits")
