@@ -129,7 +129,7 @@ def avgmagrandom(JT,b,spinN,N):
 	for t in range(N):
 		Z=spinN[t]
 		#Z=Zufallsgitter(b)
-		sum1+=HamInExp(JT,Z,b)*magnetisierungZufall2(Z,b)
+		sum1+=HamInExp(JT,Z,b)*magnetisierungZufall(Z,b)
 		summ+=HamInExp(JT,Z,b)
 	return sum1/summ
 
